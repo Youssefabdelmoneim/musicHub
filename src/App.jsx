@@ -1,8 +1,8 @@
 import "./App.css";
-import CreateHeader from "./components/header/controller";
-import CreateHome from "./components/home/controller";
-import CreateAudioPage from "./components/player/controller";
-import CreateSearchList from "./components/search/controller";
+import CreateHeader from "./components/header/logic.jsx";
+import CreateHome from "./components/home/logic.jsx";
+import CreateAudioPage from "./components/player/logic.jsx";
+import CreateSearchList from "./components/search/logic.jsx";
 import { useState } from "react";
 function App() {
   const [currentTrack, setCurrentTrack] = useState(null);

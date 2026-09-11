@@ -1,18 +1,29 @@
+import { musicDataLists } from "../../api/musicData.jsx";
+import { useState, useEffect } from "react";
 import { useRef } from "react";
 import "./style.css";
 
-export default function CreateHomeList({ query, data, setSong, activatePage }) {
+export default function CreateHome({ queries, setSong, activatePage }) {
+  const [lists, setLists] = useState([]);
+  useEffect(() => {
+    musicDataLists(queries).then((data) => setLists(data));
+  }, [queries]);
+
   return (
-    <CreateHomeListStructure query={query}>
-      {data.map((song) => (
-        <CreateSongHome
-          key={song.trackId}
-          setSong={setSong}
-          activatePage={activatePage}
-          song={song}
-        />
+    <div className="home">
+      {lists.map(({ query, data }) => (
+        <CreateHomeListStructure query={query}>
+          {data.map((song) => (
+            <CreateSongHome
+              key={song.trackId}
+              setSong={setSong}
+              activatePage={activatePage}
+              song={song}
+            />
+          ))}
+        </CreateHomeListStructure>
       ))}
-    </CreateHomeListStructure>
+    </div>
   );
 }
 
