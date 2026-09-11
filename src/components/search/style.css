@@ -1,0 +1,33 @@
+.searchList {
+  margin-top: 50px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.song_searchList {
+  flex: 0 0 50px;
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+.song_img_searchList {
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.song_description_searchList {
+  color: white;
+  font-family: Helvetica;
+  font-weight: bold;
+}
+
+.song_description_artName_searchList:hover {
+  text-decoration: underline;
+}
+.song_description_details_searchList {
+  color: gray;
+}

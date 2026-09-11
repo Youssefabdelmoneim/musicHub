@@ -1,0 +1,12 @@
+.player-view {
+  display: flex;
+  flex-direction: column;
+  padding-left: 400px;
+  padding-top: 100px;
+}
+.player-photo img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 30px;
+}
