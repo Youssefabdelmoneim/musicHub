@@ -2,7 +2,7 @@ import { musicDataList } from "../api/musicData";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function Search() {
+export default function Search({ addSong }) {
   const location = useLocation();
   const navigate = useNavigate();
   const query = location.state?.query || "ye";
@@ -12,6 +12,9 @@ export default function Search() {
     musicDataList(query).then((data) => setList(data));
   }, [query]);
 
+  {
+    list;
+  }
   return (
     <div className="flex h-full w-full flex-col px-6 py-6">
       {/* Header Info */}
@@ -27,14 +30,20 @@ export default function Search() {
       {/* Song List */}
       <div className="flex flex-col gap-1 overflow-y-auto pr-1">
         {list.map((song, index) => (
-          <SongCard song={song} index={index} navigate={navigate}></SongCard>
+          <SongCardList
+            key={song.trackId}
+            song={song}
+            index={index}
+            navigate={navigate}
+            addSong={addSong}
+          ></SongCardList>
         ))}
       </div>
     </div>
   );
 }
 
-function SongCard({ navigate, song, index }) {
+function SongCardList({ addSong, navigate, song, index }) {
   const artwork = song?.artworkUrl100
     ? song.artworkUrl100.replace("100x100bb.jpg", "600x600bb.jpg")
     : song?.artworkUrl100;
@@ -43,19 +52,20 @@ function SongCard({ navigate, song, index }) {
     <div
       key={song.trackId}
       onClick={() => {
+        addSong(song);
         navigate("/player", { state: { songData: song } });
       }}
-      className="group flex items-center justify-between rounded-xl px-3 py-2.5 transition-all duration-200 hover:bg-zinc-800/60 cursor-pointer"
+      className="group flex cursor-pointer items-center justify-between rounded-xl px-3 py-2.5 transition-all duration-200 hover:bg-zinc-800/60"
     >
       {/* Left */}
-      <div className="flex items-center gap-3.5 ">
+      <div className="flex items-center gap-3.5">
         {/* Track Number / Play Icon */}
         <div className="relative flex h-5 w-5 shrink-0 items-center justify-center text-xs font-medium text-zinc-500">
-          <span className="group-hover:opacity-0 transition-opacity">
+          <span className="transition-opacity group-hover:opacity-0">
             {index + 1}
           </span>
           <svg
-            className="absolute inset-0 h-4 w-4 fill-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute inset-0 h-4 w-4 fill-emerald-400 opacity-0 transition-opacity group-hover:opacity-100"
             viewBox="0 0 24 24"
           >
             <polygon points="5 3 19 12 5 21 5 3" />
@@ -76,14 +86,14 @@ function SongCard({ navigate, song, index }) {
           <span className="truncate text-sm font-semibold tracking-tight text-white transition-colors group-hover:text-emerald-400">
             {song.trackName}
           </span>
-          <span className="truncate text-xs font-medium text-zinc-400 mt-0.5">
+          <span className="mt-0.5 truncate text-xs font-medium text-zinc-400">
             {song.artistName}
           </span>
         </div>
       </div>
 
       {/* Right */}
-      <div className=" font-medium hidden sm:flex items-center shrink-0 text-xs  text-zinc-500">
+      <div className="hidden shrink-0 items-center text-xs font-medium text-zinc-500 sm:flex">
         <span>
           {song.collectionName || song.primaryGenreName || song.wrapperType}
         </span>
