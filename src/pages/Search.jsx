@@ -83,7 +83,7 @@ function SongCard({ navigate, song, index }) {
       </div>
 
       {/* Right */}
-      <div className="hidden sm:flex items-center shrink-0 text-xs font-medium text-zinc-500">
+      <div className=" font-medium hidden sm:flex items-center shrink-0 text-xs  text-zinc-500">
         <span>
           {song.collectionName || song.primaryGenreName || song.wrapperType}
         </span>
