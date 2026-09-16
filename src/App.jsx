@@ -1,7 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
-import { useEffect } from "react";
 import Header from "./pages/NavPages/header.jsx";
 import Aside from "./pages/NavPages/aside.jsx";
 import Home from "./pages/Home.jsx";
@@ -45,7 +44,7 @@ function App() {
   return (
     <div className="flex h-screen w-full flex-col gap-0.5 overflow-hidden bg-black text-white">
       <div className="shrink-0">
-        <Header isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+        <Header setIsCollapsed={setIsCollapsed} />
       </div>
 
       <div className="flex h-full min-w-0 flex-1">

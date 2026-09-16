@@ -1,105 +1,118 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-export default function Header({ isCollapsed, setIsCollapsed }) {
+import { useState } from "react";
+import IconButton from "../../components/Icon";
+export default function Header({ setIsCollapsed }) {
+  const handleCollapsing = () => setIsCollapsed((prev) => !prev);
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center gap-5 border-b border-zinc-800/60 bg-zinc-950/80 px-8 backdrop-blur">
-      <LeftSide isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+    <header className="flex h-16 w-full items-center justify-between gap-3 px-5">
+      <LeftSide handleCollapsing={handleCollapsing} />
       <SearchBar />
+      <RightSide />
     </header>
   );
 }
-function LeftSide({ isCollapsed, setIsCollapsed }) {
-  return (
-    <div className="flex items-center gap-3 px-1">
-      <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="flex shrink-0 flex-col justify-center gap-1 p-1 text-white transition-opacity hover:opacity-80"
-        aria-label="Toggle sidebar"
-      >
-        <span className="h-0.5 w-5 rounded-full bg-white"></span>
-        <span className="h-0.5 w-5 rounded-full bg-white"></span>
-        <span className="h-0.5 w-5 rounded-full bg-white"></span>
-      </button>
 
-      {<AppLogo />}
+function LeftSide({ handleCollapsing }) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <IconButton handleClick={handleCollapsing}>
+        <svg
+          className="h-6 w-6 fill-none stroke-current stroke-2 [stroke-linecap:round] [stroke-linejoin:round]"
+          viewBox="0 0 24 24"
+        >
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="18" x2="20" y2="18" />
+        </svg>
+      </IconButton>
+      <Logo />
+    </div>
+  );
+}
+
+function Logo() {
+  const navigate = useNavigate();
+  const handleNavigation = () => {
+    navigate("/");
+  };
+  return (
+    <div
+      className="flex cursor-pointer items-center gap-1"
+      onClick={handleNavigation}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        className="h-6 w-6 fill-none stroke-[#10b981] stroke-2 [stroke-linecap:round] [stroke-linejoin:round]"
+      >
+        <path d="M9 18V5l12-2v13" />
+        <circle cx="6" cy="18" r="3" fill="#10b981" />
+        <circle cx="18" cy="16" r="3" fill="#10b981" />
+      </svg>
+      <div className="text-lg font-medium tracking-tight">
+        Music<span className="text-[#10b981]">Hub</span>
+      </div>
     </div>
   );
 }
 function SearchBar() {
   const navigate = useNavigate();
-
-  const [val, setVal] = useState("");
-  const handleSubmit = (e) => {
+  const [query, setQuery] = useState("");
+  const handleNavigation = (e) => {
     e.preventDefault();
-    if (!val.trim()) return;
-    navigate("/search", { state: { query: val.trim() } });
+    navigate("/search", { state: { query: query } });
   };
   return (
     <form
-      onSubmit={handleSubmit}
-      className="flex w-[60%] items-center gap-3 rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2 transition-colors focus-within:border-zinc-500"
+      className="flex h-10 w-full max-w-xl items-center"
+      onSubmit={handleNavigation}
     >
-      <SearchBtn />
-
-      <input
-        type="text"
-        value={val}
-        placeholder="Songs, albums, artists..."
-        className="w-full bg-transparent text-sm text-zinc-100 placeholder-zinc-500 outline-none"
-        onChange={(e) => setVal(e.target.value)}
-      />
+      <SearchInput setQuery={setQuery} />
+      <SearchButton />
     </form>
   );
 }
-function SearchBtn() {
+function SearchInput({ setQuery }) {
+  return (
+    <div className="flex h-full flex-1 items-center rounded-l-full border border-neutral-700 bg-neutral-900 px-4">
+      <input
+        type="text"
+        className="w-full bg-transparent text-neutral-200 placeholder-neutral-400 outline-none"
+        placeholder="Search Songs"
+        onChange={(e) => setQuery(e.target.value)}
+      />
+    </div>
+  );
+}
+function SearchButton() {
   return (
     <button
       type="submit"
-      className="cursor-pointer text-zinc-400 transition-colors hover:text-white"
-      aria-label="Search"
+      className="flex h-full w-14 shrink-0 items-center justify-center rounded-r-full border border-l-0 border-neutral-700 bg-neutral-900 text-neutral-400 hover:bg-neutral-700"
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
         viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        className="h-5 w-5 fill-none stroke-current stroke-2 [stroke-linecap:round] [stroke-linejoin:round]"
       >
-        <circle cx="11" cy="11" r="8" />
+        <circle cx="11" cy="11" r="7" />
         <line x1="21" y1="21" x2="16.65" y2="16.65" />
       </svg>
     </button>
   );
 }
-function AppLogo() {
-  const navigate = useNavigate();
-
+function RightSide() {
   return (
-    <div
-      onClick={() => navigate("/")}
-      className="flex cursor-pointer items-center gap-2 overflow-hidden"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="#10b981"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-8 w-8 shrink-0"
-      >
-        <path d="M9 18V5l12-2v13" />
-        <circle cx="6" cy="18" r="3" />
-        <circle cx="18" cy="16" r="3" />
-      </svg>
-      <span className="text-lg font-bold tracking-tight whitespace-nowrap text-white">
-        music<span className="text-emerald-500">Hub</span>
-      </span>
+    <div className="flex items-center gap-3">
+      <Profile />
     </div>
+  );
+}
+
+function Profile() {
+  return (
+    <button className="h-full w-8 cursor-pointer overflow-hidden rounded-full">
+      <svg viewBox="0 0 100 100" className="h-full w-full">
+        <rect width="100%" height="100%" fill="#FFFFFF" />
+      </svg>
+    </button>
   );
 }
