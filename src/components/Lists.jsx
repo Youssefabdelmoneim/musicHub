@@ -1,12 +1,17 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-export default function Lists({ addSong, lists }) {
+export default function Lists({ addSong, lists, setSong }) {
   return (
     <div className="mr-10 ml-10 flex flex-col gap-8">
       {lists.map(({ query, data }) => (
         <List query={query} key={query}>
           {data.map((song) => (
-            <SongCard addSong={addSong} key={song.trackId} song={song} />
+            <SongCard
+              addSong={addSong}
+              key={song.trackId}
+              song={song}
+              setSong={setSong}
+            />
           ))}
         </List>
       ))}
@@ -88,7 +93,7 @@ function ListTitle({ query, handleScroll }) {
   );
 }
 
-function SongCard({ addSong, song }) {
+function SongCard({ addSong, song, setSong }) {
   const navigate = useNavigate();
   const artwork = song?.artworkUrl100
     ? song.artworkUrl100.replace("100x100bb.jpg", "600x600bb.jpg")
@@ -98,7 +103,8 @@ function SongCard({ addSong, song }) {
     <div
       onClick={() => {
         addSong(song);
-        navigate("/player", { state: { songData: song } });
+        setSong(song);
+        navigate("/player");
       }}
       className="group cursor-pointer rounded-xl bg-zinc-900/50 p-3 transition-all duration-200 hover:-translate-y-1 hover:bg-zinc-800/80"
     >

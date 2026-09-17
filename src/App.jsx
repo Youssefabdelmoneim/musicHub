@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./pages/NavPages/header.jsx";
 import Aside from "./pages/NavPages/aside.jsx";
 import Home from "./pages/Home.jsx";
@@ -9,32 +9,51 @@ import Search from "./pages/Search.jsx";
 import Player from "./pages/Player.jsx";
 
 function App() {
+  const stateInit = (key, defaultValue) => {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : defaultValue;
+  };
+
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useState([]);
-  const [savedSongs, setSavedSongs] = useState([]);
+  const [query, setQuery] = useState(() => stateInit("query", ""));
+  const [song, setSong] = useState(() => stateInit("song", null));
+  const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useState(() =>
+    stateInit("recentlyPlayedSongs", []),
+  );
+  const [savedSongs, setSavedSongs] = useState(() =>
+    stateInit("savedSongs", []),
+  );
+  useEffect(() => {
+    localStorage.setItem(
+      "recentlyPlayedSongs",
+      JSON.stringify(recentlyPlayedSongs),
+    );
+    localStorage.setItem("savedSongs", JSON.stringify(savedSongs));
+    localStorage.setItem("song", JSON.stringify(song));
+    localStorage.setItem("query", JSON.stringify(query));
+  }, [recentlyPlayedSongs, savedSongs, song, query]);
 
   const addSong = (songData) => {
     setRecentlyPlayedSongs((prevState) => {
       const filtered = prevState.filter(
         (song) => song.trackId !== songData.trackId,
       );
-      const songs = [...filtered, songData].slice(0, 50);
+      const songs = [songData, ...filtered].slice(0, 50);
       return songs;
     });
   };
   const saveSong = (songData) => {
-    let type = `save`;
     setSavedSongs((prevState) => {
-      const filtered = prevState.filter((song) => {
-        if (song.trackId === songData.trackId) type = `unsave`;
-        return song.trackId !== songData.trackId;
-      });
-      const songs =
-        type === `save` ? [...filtered, songData].slice(0, 50) : filtered;
-      return songs;
+      const existed = prevState.some(
+        (song) => song.trackId === songData.trackId,
+      );
+
+      if (existed) {
+        return prevState.filter((song) => song.trackId !== songData.trackId);
+      }
+      return [songData, ...prevState].slice(0, 50);
     });
   };
-
   const isSavedSong = (songData) => {
     return savedSongs.some((song) => {
       return song.trackId === songData.trackId;
@@ -44,7 +63,7 @@ function App() {
   return (
     <div className="flex h-screen w-full flex-col gap-0.5 overflow-hidden bg-black text-white">
       <div className="shrink-0">
-        <Header setIsCollapsed={setIsCollapsed} />
+        <Header setIsCollapsed={setIsCollapsed} setQuery={setQuery} />
       </div>
 
       <div className="flex h-full min-w-0 flex-1">
@@ -56,7 +75,11 @@ function App() {
             <Route
               path="/"
               element={
-                <Home queries={[`Pop`, `Hip Hop`, `Rock`]} addSong={addSong} />
+                <Home
+                  queries={[`Pop`, `Hip Hop`, `Rock`]}
+                  addSong={addSong}
+                  setSong={setSong}
+                />
               }
             />
             <Route
@@ -65,13 +88,25 @@ function App() {
                 <Library
                   lists={[recentlyPlayedSongs, savedSongs]}
                   addSong={addSong}
+                  setSong={setSong}
                 />
               }
             />
-            <Route path="/search" element={<Search addSong={addSong} />} />
+            <Route
+              path="/search"
+              element={
+                <Search addSong={addSong} setSong={setSong} query={query} />
+              }
+            />
             <Route
               path="/player"
-              element={<Player saveSong={saveSong} isSavedSong={isSavedSong} />}
+              element={
+                <Player
+                  saveSong={saveSong}
+                  isSavedSong={isSavedSong}
+                  songData={song}
+                />
+              }
             />
           </Routes>
         </div>

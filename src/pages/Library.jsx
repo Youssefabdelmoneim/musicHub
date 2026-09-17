@@ -1,8 +1,8 @@
 import Lists from "../components/Lists.jsx";
-export default function Library({ lists, addSong }) {
+export default function Library({ lists, addSong, setSong }) {
   lists = listDataOrganizer(lists);
   console.log(lists);
-  return <Lists lists={lists} addSong={addSong} />;
+  return <Lists lists={lists} addSong={addSong} setSong={setSong} />;
 }
 
 function listDataOrganizer(lists) {

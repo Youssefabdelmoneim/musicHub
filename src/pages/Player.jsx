@@ -1,7 +1,4 @@
-import { useLocation } from "react-router-dom";
-export default function Player({ saveSong, isSavedSong }) {
-  const Location = useLocation();
-  const songData = Location.state?.songData;
+export default function Player({ songData, saveSong, isSavedSong }) {
   const isSaved = isSavedSong?.(songData);
 
   const artwork = songData?.artworkUrl100

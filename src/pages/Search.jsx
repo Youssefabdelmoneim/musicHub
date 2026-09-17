@@ -1,20 +1,15 @@
 import { musicDataList } from "../api/musicData";
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function Search({ addSong }) {
-  const location = useLocation();
+export default function Search({ query, addSong, setSong }) {
   const navigate = useNavigate();
-  const query = location.state?.query || "ye";
   const [list, setList] = useState([]);
 
   useEffect(() => {
     musicDataList(query).then((data) => setList(data));
   }, [query]);
 
-  {
-    list;
-  }
   return (
     <div className="flex h-full w-full flex-col px-6 py-6">
       {/* Header Info */}
@@ -36,6 +31,7 @@ export default function Search({ addSong }) {
             index={index}
             navigate={navigate}
             addSong={addSong}
+            setSong={setSong}
           ></SongCardList>
         ))}
       </div>
@@ -43,7 +39,7 @@ export default function Search({ addSong }) {
   );
 }
 
-function SongCardList({ addSong, navigate, song, index }) {
+function SongCardList({ addSong, navigate, song, index, setSong }) {
   const artwork = song?.artworkUrl100
     ? song.artworkUrl100.replace("100x100bb.jpg", "600x600bb.jpg")
     : song?.artworkUrl100;
@@ -53,7 +49,8 @@ function SongCardList({ addSong, navigate, song, index }) {
       key={song.trackId}
       onClick={() => {
         addSong(song);
-        navigate("/player", { state: { songData: song } });
+        setSong(song);
+        navigate("/player");
       }}
       className="group flex cursor-pointer items-center justify-between rounded-xl px-3 py-2.5 transition-all duration-200 hover:bg-zinc-800/60"
     >
