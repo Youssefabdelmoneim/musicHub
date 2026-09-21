@@ -1,8 +1,12 @@
 import { useNavigate } from "react-router-dom";
-export default function Aside({ isCollapsed }) {
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
+export default function Aside() {
+  const ctx = useContext(AppContext);
+  const { isCollapsed } = ctx;
   return (
     <aside
-      className={`hidden h-full flex-col gap-8 overflow-hidden border-r border-zinc-800/60 bg-zinc-950 p-4 transition-all duration-700 md:flex ${
+      className={`hidden h-full shrink-0 flex-col gap-8 overflow-hidden border-r border-zinc-800/60 bg-zinc-950 p-4 transition-all duration-700 md:flex ${
         isCollapsed ? "w-18" : "w-60"
       }`}
     >

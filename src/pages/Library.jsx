@@ -1,8 +1,13 @@
 import Lists from "../components/Lists.jsx";
-export default function Library({ lists, addSong, setSong }) {
-  lists = listDataOrganizer(lists);
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext.jsx";
+export default function Library() {
+  const ctx = useContext(AppContext);
+  const { recentlyPlayedSongs, savedSongs } = ctx;
+  let lists = [recentlyPlayedSongs, savedSongs];
   console.log(lists);
-  return <Lists lists={lists} addSong={addSong} setSong={setSong} />;
+  lists = listDataOrganizer(lists);
+  return <Lists lists={lists} />;
 }
 
 function listDataOrganizer(lists) {

@@ -1,8 +1,12 @@
 import { musicDataList } from "../api/musicData";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-export default function Search({ query, addSong, setSong }) {
+import addSong from "../components/addSong";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext.jsx";
+export default function Search() {
+  const ctx = useContext(AppContext);
+  const { query, setRecentlyPlayedSongs, setSong } = ctx;
   const navigate = useNavigate();
   const [list, setList] = useState([]);
 
@@ -30,7 +34,7 @@ export default function Search({ query, addSong, setSong }) {
             song={song}
             index={index}
             navigate={navigate}
-            addSong={addSong}
+            setRecentlyPlayedSongs={setRecentlyPlayedSongs}
             setSong={setSong}
           ></SongCardList>
         ))}
@@ -39,7 +43,13 @@ export default function Search({ query, addSong, setSong }) {
   );
 }
 
-function SongCardList({ addSong, navigate, song, index, setSong }) {
+function SongCardList({
+  setRecentlyPlayedSongs,
+  navigate,
+  song,
+  index,
+  setSong,
+}) {
   const artwork = song?.artworkUrl100
     ? song.artworkUrl100.replace("100x100bb.jpg", "600x600bb.jpg")
     : song?.artworkUrl100;
@@ -48,7 +58,7 @@ function SongCardList({ addSong, navigate, song, index, setSong }) {
     <div
       key={song.trackId}
       onClick={() => {
-        addSong(song);
+        setRecentlyPlayedSongs(addSong(song));
         setSong(song);
         navigate("/player");
       }}

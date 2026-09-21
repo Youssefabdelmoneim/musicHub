@@ -1,17 +1,15 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-export default function Lists({ addSong, lists, setSong }) {
+import addSong from "./addSong";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext.jsx";
+export default function Lists({ lists }) {
   return (
     <div className="mr-10 ml-10 flex flex-col gap-8">
       {lists.map(({ query, data }) => (
         <List query={query} key={query}>
           {data.map((song) => (
-            <SongCard
-              addSong={addSong}
-              key={song.trackId}
-              song={song}
-              setSong={setSong}
-            />
+            <SongCard key={song.trackId} song={song} />
           ))}
         </List>
       ))}
@@ -93,7 +91,9 @@ function ListTitle({ query, handleScroll }) {
   );
 }
 
-function SongCard({ addSong, song, setSong }) {
+function SongCard({ song }) {
+  const ctx = useContext(AppContext);
+  const { setSong, setRecentlyPlayedSongs } = ctx;
   const navigate = useNavigate();
   const artwork = song?.artworkUrl100
     ? song.artworkUrl100.replace("100x100bb.jpg", "600x600bb.jpg")
@@ -102,7 +102,7 @@ function SongCard({ addSong, song, setSong }) {
   return (
     <div
       onClick={() => {
-        addSong(song);
+        setRecentlyPlayedSongs(addSong(song));
         setSong(song);
         navigate("/player");
       }}

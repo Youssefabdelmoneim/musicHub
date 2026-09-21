@@ -1,0 +1,10 @@
+const addSong = (songData) => (prev) => {
+  const exists = prev.some((item) => item.trackId === songData.trackId);
+  if (exists) {
+    return prev.filter((item) => item.trackId !== songData.trackId);
+  }
+  console.log(`done`);
+  return [songData, ...prev].slice(0, 50);
+};
+
+export default addSong;

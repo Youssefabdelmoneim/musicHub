@@ -1,13 +1,30 @@
-export default function Player({ songData, saveSong, isSavedSong }) {
-  const isSaved = isSavedSong?.(songData);
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext.jsx";
+
+export default function Player() {
+  const ctx = useContext(AppContext);
+  const { song: songData, setSavedSongs, savedSongs = [] } = ctx || {};
 
   const artwork = songData?.artworkUrl100
     ? songData.artworkUrl100.replace("100x100bb.jpg", "600x600bb.jpg")
     : songData?.artworkUrl100;
 
+  const isSaved = Boolean(
+    songData && savedSongs?.some((item) => item.trackId === songData.trackId),
+  );
+
   const handleToggleSave = () => {
     if (!songData) return;
-    saveSong?.(songData);
+
+    setSavedSongs((prev = []) => {
+      const alreadySaved = prev.some(
+        (item) => item.trackId === songData.trackId,
+      );
+      if (alreadySaved) {
+        return prev.filter((item) => item.trackId !== songData.trackId);
+      }
+      return [...prev, songData];
+    });
   };
 
   return (
@@ -16,7 +33,7 @@ export default function Player({ songData, saveSong, isSavedSong }) {
       <div
         className="animate-in fade-in zoom-in-75 pointer-events-none absolute inset-0 scale-150 opacity-20 blur-3xl transition-all duration-1000 ease-out"
         style={{
-          backgroundImage: `url(${artwork})`,
+          backgroundImage: artwork ? `url(${artwork})` : "none",
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
@@ -27,7 +44,7 @@ export default function Player({ songData, saveSong, isSavedSong }) {
         {/* Cover Art */}
         <div className="player-photo relative aspect-square w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl transition-transform duration-500 ease-out group-hover:scale-[1.02]">
           <img
-            src={artwork}
+            src={artwork || "/placeholder.png"}
             alt={songData?.trackName || "Track artwork"}
             className="h-full w-full object-cover transition-transform duration-700 ease-out hover:scale-110"
           />
@@ -36,8 +53,9 @@ export default function Player({ songData, saveSong, isSavedSong }) {
           <button
             type="button"
             onClick={handleToggleSave}
+            disabled={!songData}
             aria-label={isSaved ? "Remove from Library" : "Save to Library"}
-            className="absolute top-3 right-3 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md transition-all duration-200 hover:scale-110 hover:bg-black/80 active:scale-95"
+            className="absolute top-3 right-3 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md transition-all duration-200 hover:scale-110 hover:bg-black/80 active:scale-95 disabled:opacity-40"
           >
             <svg
               className={`h-5 w-5 transition-colors duration-200 ${
@@ -68,11 +86,12 @@ export default function Player({ songData, saveSong, isSavedSong }) {
         {/* Controller */}
         <div className="player-controller mt-6 flex w-full justify-center">
           <audio
+            key={songData?.trackId || "no-track"}
+            src={songData?.previewUrl}
             controls
             autoPlay
             className="h-10 w-full rounded-full opacity-90 brightness-95 contrast-125 hue-rotate-180 invert transition-all duration-300 hover:opacity-100"
           >
-            <source src={songData?.previewUrl} type="audio/mp4" />
             Your browser does not support the audio element.
           </audio>
         </div>

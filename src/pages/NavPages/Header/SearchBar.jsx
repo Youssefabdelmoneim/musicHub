@@ -13,11 +13,7 @@ export default function SearchBar({ setQuery }) {
       className="flex h-10 w-full max-w-xl items-center"
       onSubmit={handleNavigation}
     >
-      <SearchInput
-        setQuery={setQuery}
-        inputField={inputField}
-        setInputField={setInputField}
-      />
+      <SearchInput inputField={inputField} setInputField={setInputField} />
       <SearchButton />
     </form>
   );
