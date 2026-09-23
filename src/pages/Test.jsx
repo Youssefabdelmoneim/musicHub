@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-
+import { useRef } from "react";
 function PageHeader({ title }) {
   return (
     <header className="sticky top-0 z-20 flex h-16 w-full items-center bg-fuchsia-800 px-4 text-white shadow-md sm:px-8">
@@ -15,6 +15,7 @@ function FormField({
   value,
   onChange,
   placeholder,
+  emailEl,
   required = false,
 }) {
   return (
@@ -26,6 +27,7 @@ function FormField({
         {label}
       </label>
       <input
+        ref={emailEl}
         id={id}
         name={id}
         type={type}
@@ -93,14 +95,10 @@ function formReducer(state, action) {
 
 export default function Test() {
   const [state, dispatch] = useReducer(formReducer, initialFormState);
-
+  const emailEl = useRef();
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Fixed: was referencing non-existent 'email' and 'password'
-    console.log("Submitted:", {
-      email: state.email,
-      password: state.password,
-    });
+    console;
   };
 
   return (
@@ -112,6 +110,7 @@ export default function Test() {
             <FormField
               id="email"
               label="E-Mail"
+              emailEl={emailEl}
               type="email"
               placeholder="you@example.com"
               value={state.email}

@@ -1,9 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { AppContext } from "../context/AppContext.jsx";
+import addSong from "../components/addSong";
 
 export default function Player() {
   const ctx = useContext(AppContext);
-  const { song: songData, setSavedSongs, savedSongs = [] } = ctx || {};
+  const {
+    song: songData,
+    setSavedSongs,
+    savedSongs,
+    setRecentlyPlayedSongs,
+  } = ctx;
+
+  useEffect(() => {
+    setRecentlyPlayedSongs(addSong(songData));
+  }, [songData?.trackId]);
 
   const artwork = songData?.artworkUrl100
     ? songData.artworkUrl100.replace("100x100bb.jpg", "600x600bb.jpg")
@@ -15,16 +25,7 @@ export default function Player() {
 
   const handleToggleSave = () => {
     if (!songData) return;
-
-    setSavedSongs((prev = []) => {
-      const alreadySaved = prev.some(
-        (item) => item.trackId === songData.trackId,
-      );
-      if (alreadySaved) {
-        return prev.filter((item) => item.trackId !== songData.trackId);
-      }
-      return [...prev, songData];
-    });
+    setSavedSongs(addSong(songData));
   };
 
   return (

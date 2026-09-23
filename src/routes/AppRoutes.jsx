@@ -3,7 +3,7 @@ import Home from "../pages/Home";
 import Library from "../pages/Library";
 import Search from "../pages/Search";
 import Player from "../pages/Player";
-
+import MoreSongs from "../pages/MoreSongs";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -11,6 +11,7 @@ export default function AppRoutes() {
       <Route path="/library" element={<Library />} />
       <Route path="/search" element={<Search />} />
       <Route path="/player" element={<Player />} />
+      <Route path="/MoreSongs" element={<MoreSongs />} />
     </Routes>
   );
 }

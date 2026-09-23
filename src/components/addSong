@@ -3,7 +3,6 @@ const addSong = (songData) => (prev) => {
   if (exists) {
     return prev.filter((item) => item.trackId !== songData.trackId);
   }
-  console.log(`done`);
   return [songData, ...prev].slice(0, 50);
 };
 
