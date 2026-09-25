@@ -1,9 +1,14 @@
+let once = false;
 export async function musicDataList(query) {
   const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&attribute=artistTerm&explicit=yes`;
   try {
-    const res = await fetch(url);
-    const results = await res.json();
-    const { _, results: data } = results;
+    const r1 = await fetch(url);
+    const r2 = await r1.json();
+    const data = r2.results;
+    if (!once) {
+      console.log(data[0]);
+      once = true;
+    }
     return data;
   } catch (err) {
     throw new Error("there is a problem with fetching data");

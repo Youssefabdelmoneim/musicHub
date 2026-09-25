@@ -1,5 +1,4 @@
 export default function ActionButton({ onClick, className = "", children }) {
-  console.log(`what`);
   return (
     <button
       type="button"

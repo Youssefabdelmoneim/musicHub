@@ -6,7 +6,7 @@ export const AppContext = createContext(null);
 export default function AppProvider({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [query, setQuery] = useLocalStorage("query", "");
-  const [song, setSong] = useState(null);
+  const [song, setSong] = useLocalStorage("song", null);
   const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useLocalStorage(
     "recentlyPlayedSongs",
     [],
