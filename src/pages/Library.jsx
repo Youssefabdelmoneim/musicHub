@@ -5,7 +5,6 @@ export default function Library() {
   const ctx = useContext(AppContext);
   const { recentlyPlayedSongs, savedSongs } = ctx;
   let lists = [recentlyPlayedSongs, savedSongs];
-  console.log(lists);
   lists = listDataOrganizer(lists);
   return <Lists lists={lists} />;
 }

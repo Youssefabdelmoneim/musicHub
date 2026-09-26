@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
-export default function Aside() {
+import NavListItem from "../../components/NavListItem";
+export default function PcAside() {
   const ctx = useContext(AppContext);
   const { isCollapsed } = ctx;
   return (
@@ -35,19 +35,5 @@ export default function Aside() {
         </NavListItem>
       </ul>
     </aside>
-  );
-}
-
-function NavListItem({ path, children }) {
-  const navigate = useNavigate();
-
-  return (
-    <li onClick={() => navigate(path)}>
-      <button
-        className={`flex w-full items-center justify-start gap-3 rounded-lg px-3 py-2 text-zinc-300 transition-colors hover:bg-zinc-900 hover:text-white`}
-      >
-        {children}
-      </button>
-    </li>
   );
 }
