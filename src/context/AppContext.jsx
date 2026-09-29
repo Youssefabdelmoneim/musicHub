@@ -4,7 +4,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 export const AppContext = createContext(null);
 
 export default function AppProvider({ children }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [query, setQuery] = useLocalStorage("query", "");
   const [song, setSong] = useLocalStorage("song", null);
   const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useLocalStorage(

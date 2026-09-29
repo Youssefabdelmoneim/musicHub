@@ -4,6 +4,7 @@ import Library from "../pages/Library";
 import Search from "../pages/Search";
 import Player from "../pages/Player";
 import MoreSongs from "../pages/MoreSongs";
+import Test from "../pages/Test";
 export default function AppRoutes() {
   return (
     <Routes>
